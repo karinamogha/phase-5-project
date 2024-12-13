@@ -7,25 +7,33 @@ from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
+import os  # For environment variables
 
 # Local imports
 
-# Instantiate app, set attributes
+# Flask App Configuration
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.json.compact = False
 
-# Define metadata, instantiate db
+# Database Configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///app.db')  # Use DATABASE_URL env or fallback to SQLite
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.json.compact = False  # Adjust JSON formatting
+
+# SQLAlchemy Metadata Convention
 metadata = MetaData(naming_convention={
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
 })
+
+# Database Initialization
 db = SQLAlchemy(metadata=metadata)
-migrate = Migrate(app, db)
 db.init_app(app)
 
-# Instantiate REST API
+# Flask-Migrate Setup
+migrate = Migrate(app, db)
+
+# RESTful API Initialization
 api = Api(app)
 
-# Instantiate CORS
-CORS(app)
+# CORS Setup
+CORS(app, resources={r"/api/*": {"origins": "*"}})  # Allow CORS only for API routes
+
