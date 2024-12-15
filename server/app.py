@@ -23,8 +23,7 @@ jwt = JWTManager(app)
 
 @app.route('/')
 def index():
-    return '<h1>Project Server</h1>'
-
+    return '<h1>Welcome to Orna Cloud API</h1>'
 
 # Authentication routes
 @app.route('/register', methods=['POST'])
@@ -34,7 +33,7 @@ def register():
         return jsonify({'error': 'Missing required fields'}), 400
     if User.query.filter_by(email=data['email']).first():
         return jsonify({'error': 'Email already exists'}), 400
-    
+
     user = User(name=data['name'], email=data['email'], password=data['password'])
     db.session.add(user)
     db.session.commit()
@@ -50,7 +49,6 @@ def login():
 
     token = create_access_token(identity=user.id)
     return jsonify({'token': token, 'user_id': user.id}), 200
-
 
 # Invoice routes
 @app.route('/invoices', methods=['POST'])
@@ -82,7 +80,6 @@ def get_invoices(user_id):
         'invoices_received': [i.to_dict() for i in invoices_received],
     }), 200
 
-
 # Memo routes
 @app.route('/memos', methods=['POST'])
 @jwt_required()
@@ -112,8 +109,13 @@ def get_memos(user_id):
         'memos_received': [m.to_dict() for m in memos_received],
     }), 200
 
+# Error handling for invalid routes
+@app.errorhandler(404)
+def page_not_found(e):
+    return jsonify({'error': 'Route not found'}), 404
 
 if __name__ == '__main__':
-    app.run(port=5555, debug=True)
+    app.run(port=3000, debug=True)
+
 
 

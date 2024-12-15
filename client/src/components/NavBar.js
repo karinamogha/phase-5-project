@@ -6,16 +6,16 @@ const NavBar = () => {
     <nav>
       <ul>
         <li>
-          <Link to="/login">Login</Link>
-        </li>
-        <li>
-          <Link to="/register">Register</Link>
-        </li>
-        <li>
           <Link to="/invoices">Invoices</Link>
         </li>
         <li>
           <Link to="/memos">Memos</Link>
+        </li>
+        <li>
+          <Link to="/create-invoice">Create Invoice</Link>
+        </li>
+        <li>
+          <Link to="/create-memo">Create Memo</Link>
         </li>
       </ul>
     </nav>
@@ -23,3 +23,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+

@@ -7,7 +7,7 @@ const Invoices = ({ token }) => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const response = await axios.get("http://localhost:5555/invoices/1", {
+        const response = await axios.get("http://localhost:3000/invoices/1", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setInvoices(response.data.invoices_sent);

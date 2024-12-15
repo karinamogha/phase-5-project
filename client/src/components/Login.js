@@ -1,20 +1,24 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory(); // Hook for navigation
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5555/login", {
+      const response = await axios.post("http://localhost:3000/login", {
         email,
         password,
       });
-      setToken(response.data.token);
+      setToken(response.data.token); // Store the token from the backend
       alert("Login successful!");
+      history.push("/invoices"); // Navigate to the invoices page after login
     } catch (err) {
+      console.error(err);
       alert("Invalid credentials");
     }
   };
@@ -27,12 +31,14 @@ const Login = ({ setToken }) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
+        required
       />
       <input
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
+        required
       />
       <button type="submit">Login</button>
     </form>
@@ -40,4 +46,6 @@ const Login = ({ setToken }) => {
 };
 
 export default Login;
+
+
 

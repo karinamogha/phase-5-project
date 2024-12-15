@@ -98,5 +98,48 @@ nav ul li a {
 nav ul li a:hover {
   color: #ffeb3b;
 }
+form {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+form input,
+form textarea,
+form button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  justify-content: space-around;
+}
+
+nav ul li {
+  padding: 10px;
+}
+.homepage-buttons a {
+  display: inline-block; /* Allow padding and block-like behavior */
+  padding: 15px 30px; /* Larger padding for bigger buttons */
+  font-size: 1.5rem; /* Bigger font size */
+  text-align: center;
+  background-color: var(--primary-color);
+  color: var(--header-color);
+  border: none;
+  border-radius: 8px;
+  text-decoration: none; /* Remove the underline from links */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.homepage-buttons a:hover {
+  background-color: var(--link-hover-color); /* Hover effect */
+}
 
 
