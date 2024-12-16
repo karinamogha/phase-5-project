@@ -7,7 +7,7 @@ const Memos = ({ token }) => {
   useEffect(() => {
     const fetchMemos = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/memos/1", {
+        const response = await axios.get("http://localhost:5555/memos/1", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setMemos(response.data.memos_sent);

@@ -141,5 +141,65 @@ nav ul li {
 .homepage-buttons a:hover {
   background-color: var(--link-hover-color); /* Hover effect */
 }
+.search-container {
+  margin: 20px auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.search-results {
+  margin-top: 10px;
+  text-align: left;
+}
+
+.search-results ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.search-results ul li {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.search-results ul li a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+.search-results ul li a:hover {
+  color: var(--link-hover-color);
+}
+
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:hover {
+  background-color: var(--link-hover-color);
+}
 
 
