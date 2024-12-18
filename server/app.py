@@ -24,13 +24,15 @@ jwt = JWTManager(app)
 # Enable CORS
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# Views and Routes
+# ------------------- Routes -------------------
 
 @app.route('/')
 def index():
     return '<h1>Welcome to Orna Cloud API</h1>'
 
-# Authentication routes
+
+# ------------- Authentication Routes -------------
+
 @app.route('/register', methods=['POST'])
 def register():
     try:
@@ -63,14 +65,17 @@ def login():
     except Exception as e:
         return jsonify({'error': 'An error occurred during login', 'details': str(e)}), 500
 
-# Invoice routes
+
+# ------------- Invoice Routes -------------
+
 @app.route('/invoices', methods=['POST'])
 @jwt_required()
 def create_invoice():
     try:
         data = request.json
         user_id = get_jwt_identity()
-        if not all(key in data for key in ('receiver_id', 'amount', 'description')):
+        required_fields = ['receiver_id', 'amount', 'description']
+        if not all(key in data for key in required_fields):
             return jsonify({'error': 'Missing required fields'}), 400
 
         invoice = Invoice(
@@ -93,14 +98,28 @@ def get_invoices(user_id):
     try:
         invoices_sent = Invoice.query.filter_by(sender_id=user_id).all()
         invoices_received = Invoice.query.filter_by(receiver_id=user_id).all()
+
+        # Group invoices by receiver (sent invoices) or sender (received invoices)
+        grouped_invoices_sent = {}
+        for invoice in invoices_sent:
+            receiver_name = invoice.receiver.name
+            grouped_invoices_sent.setdefault(receiver_name, []).append(invoice.to_dict())
+
+        grouped_invoices_received = {}
+        for invoice in invoices_received:
+            sender_name = invoice.sender.name
+            grouped_invoices_received.setdefault(sender_name, []).append(invoice.to_dict())
+
         return jsonify({
-            'invoices_sent': [i.to_dict() for i in invoices_sent],
-            'invoices_received': [i.to_dict() for i in invoices_received],
+            'invoices_sent': grouped_invoices_sent,
+            'invoices_received': grouped_invoices_received,
         }), 200
     except Exception as e:
         return jsonify({'error': 'An error occurred while fetching invoices', 'details': str(e)}), 500
 
-# Memo routes
+
+# ------------- Memo Routes -------------
+
 @app.route('/memos', methods=['POST'])
 @jwt_required()
 def create_memo():
@@ -129,20 +148,37 @@ def get_memos(user_id):
     try:
         memos_sent = Memo.query.filter_by(sender_id=user_id).all()
         memos_received = Memo.query.filter_by(receiver_id=user_id).all()
+
+        # Group memos by sender or receiver
+        grouped_memos_sent = {}
+        for memo in memos_sent:
+            receiver_name = memo.receiver.name
+            grouped_memos_sent.setdefault(receiver_name, []).append(memo.to_dict())
+
+        grouped_memos_received = {}
+        for memo in memos_received:
+            sender_name = memo.sender.name
+            grouped_memos_received.setdefault(sender_name, []).append(memo.to_dict())
+
         return jsonify({
-            'memos_sent': [m.to_dict() for m in memos_sent],
-            'memos_received': [m.to_dict() for m in memos_received],
+            'memos_sent': grouped_memos_sent,
+            'memos_received': grouped_memos_received,
         }), 200
     except Exception as e:
         return jsonify({'error': 'An error occurred while fetching memos', 'details': str(e)}), 500
 
-# Error handling for invalid routes
+
+# ------------- Error Handling -------------
+
 @app.errorhandler(404)
 def page_not_found(e):
     return jsonify({'error': 'Route not found'}), 404
 
+# Run Application
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+
+
 
 
 
